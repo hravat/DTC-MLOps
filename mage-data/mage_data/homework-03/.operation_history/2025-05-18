@@ -1,0 +1,3 @@
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "homework03_mlops"}, "timestamp": 1747563392, "user": null}
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "homework03_mlops"}, "timestamp": 1747585155, "user": null}
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "joyous_butterfly"}, "timestamp": 1747587302, "user": null}

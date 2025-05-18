@@ -1,0 +1,66 @@
+version: '3'
+services:
+  mage:
+    image: mageai/mageai:latest
+    container_name: magic
+    depends_on:
+      - postgres
+    command: /bin/bash -c '[ ! -d /home/src/homework-03 ] && mage init /home/src/homework-03; mage start /home/src/homework-03 --host 0.0.0.0'
+    env_file:
+      - .env
+    environment:
+      ENV: dev
+      POSTGRES_DB: mage
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres@123
+      POSTGRES_HOST: postgres_db
+      PG_HOST_PORT: 5432
+      AUTOSAVE: false
+    ports:
+      - 6789:6789
+    volumes:
+      - ../mage-data:/home/src/
+      - ../data:/nyc-taxi-data
+    restart: on-failure:5
+
+
+  postgres:
+    image: postgres:14
+    container_name: postgres_db
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ../init-db:/docker-entrypoint-initdb.d
+
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mlflow_server
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      BACKEND_STORE_URI: ${BACKEND_STORE_URI}
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../mlflow-artifacts:/mlflow-artifacts
+    depends_on:
+      - postgres
+    entrypoint: ["mlflow", "server"]
+    command: [
+      "--backend-store-uri", "${BACKEND_STORE_URI}",
+      "--default-artifact-root", "${ARTIFACT_ROOT}",
+      "--host", "0.0.0.0",
+      "--port", "5000"
+    ]
