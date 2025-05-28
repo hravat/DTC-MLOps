@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  predictor:
+    build: .
+    container_name: duration_predictor
+    command: ["python", "predict.py", "--arg_year", "2023", "--arg_month", "04"]
