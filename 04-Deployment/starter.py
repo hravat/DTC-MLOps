@@ -69,7 +69,7 @@ df_result = pd.DataFrame({
 
 
 
-output_file = f'../data/yellow_tripdata_{args.arg_year:04d}-{args.arg_month:02d}-results.parquet'
+output_file = f'.yellow_tripdata_{args.arg_year:04d}-{args.arg_month:02d}-results.parquet'
 
 df_result.to_parquet(
     output_file,

@@ -4,4 +4,4 @@ services:
   predictor:
     build: .
     container_name: duration_predictor
-    command: ["python", "predict.py", "--arg_year", "2023", "--arg_month", "04"]
+    command: ["python", "starter.py", "--arg_year", "2023", "--arg_month", "04"]
